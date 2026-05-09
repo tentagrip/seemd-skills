@@ -23,7 +23,7 @@ After install, your agent triggers on phrases like:
 …and runs:
 
 ```sh
-npx see-md <path-to-md-file>
+npx @tentagrip/seemd <path-to-md-file>
 ```
 
 The CLI uploads the markdown file (and every relative `.md` it links to), rewriting cross-document links to slug URLs so navigation works on the shared page. Returns a URL like `https://seemd.xyz/<slug>`. Documents auto-expire after 3 days.
@@ -32,7 +32,7 @@ The CLI uploads the markdown file (and every relative `.md` it links to), rewrit
 
 | Skill | Description |
 |---|---|
-| [`seemd`](./skills/seemd/SKILL.md) | Share a markdown file as a public URL via the `see-md` CLI. |
+| [`seemd`](./skills/seemd/SKILL.md) | Share a markdown file as a public URL via the `@tentagrip/seemd` CLI. |
 
 ## Manual install
 
@@ -53,7 +53,7 @@ curl -fsSL https://raw.githubusercontent.com/tentagrip/seemd-skills/main/skills/
 ## Related
 
 - **Source**: https://github.com/tentagrip/seemd
-- **CLI on npm**: [`see-md`](https://www.npmjs.com/package/see-md)
+- **CLI on npm**: [`@tentagrip/seemd`](https://www.npmjs.com/package/@tentagrip/seemd)
 - **Service**: https://seemd.xyz
 
 ## License

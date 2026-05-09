@@ -1,6 +1,6 @@
 ---
 name: seemd
-description: Use when the user asks for a shareable web URL for a local markdown file. Triggers on phrases like "share this markdown", "share this doc", "give me a link for this", "send this as a URL", "publish this", "make a public page for this", and Korean equivalents like "공유해줘", "이 README 공유", "링크로 보내줘". Especially when the user names a `.md` file path together with one of those phrases. Runs `npx see-md <path>`, returns a slug URL on https://seemd.xyz. Linked `.md` files are uploaded together and cross-document links rewritten to slug URLs. Documents auto-expire after 3 days.
+description: Use when the user asks for a shareable web URL for a local markdown file. Triggers on phrases like "share this markdown", "share this doc", "give me a link for this", "send this as a URL", "publish this", "make a public page for this", and Korean equivalents like "공유해줘", "이 README 공유", "링크로 보내줘". Especially when the user names a `.md` file path together with one of those phrases. Runs `npx @tentagrip/seemd <path>`, returns a slug URL on https://seemd.xyz. Linked `.md` files are uploaded together and cross-document links rewritten to slug URLs. Documents auto-expire after 3 days.
 user-invocable: true
 allowed-tools: Bash
 argument-hint: "<path-to-md-file>"
@@ -15,7 +15,7 @@ Runs the `seemd` CLI to upload a markdown file (and every relative `.md` it link
 ## How to invoke
 
 ```bash
-npx see-md <path-to-md-file>
+npx @tentagrip/seemd <path-to-md-file>
 ```
 
 The **last line of stdout is the share URL**. Pass it to the user verbatim. `stderr` carries progress (`Uploading N linked documents alongside...`); surface the count in your reply.
