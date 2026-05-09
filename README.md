@@ -5,7 +5,7 @@ AI agent skill bundle for [seemd](https://seemd.xyz) — share local markdown fi
 ## Install
 
 ```sh
-npx skills add OpenRhapsody/seemd-skills
+npx skills add tentagrip/seemd-skills
 ```
 
 The [`skills` CLI](https://skills.sh) auto-detects whatever agent you use (Claude Code, Cursor, Codex, OpenCode, GitHub Copilot, Windsurf, Gemini, Cline, …) and installs to the right path.
@@ -46,13 +46,13 @@ If you don't want to use `npx skills`, copy the skill file directly into your ag
 
 ```sh
 mkdir -p ~/.claude/skills/seemd
-curl -fsSL https://raw.githubusercontent.com/OpenRhapsody/seemd-skills/main/skills/seemd/SKILL.md \
+curl -fsSL https://raw.githubusercontent.com/tentagrip/seemd-skills/main/skills/seemd/SKILL.md \
   -o ~/.claude/skills/seemd/SKILL.md
 ```
 
 ## Related
 
-- **Source**: https://github.com/OpenRhapsody/seemd
+- **Source**: https://github.com/tentagrip/seemd
 - **CLI on npm**: [`see-md`](https://www.npmjs.com/package/see-md)
 - **Service**: https://seemd.xyz
 
