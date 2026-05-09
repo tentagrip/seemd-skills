@@ -33,14 +33,11 @@ Exceptions:
 - Upload failed → one short line with the error
 - User explicitly asked for details ("공유하고 어떤 파일들이 같이 갔는지", "tell me what got uploaded") → then add a brief summary AFTER the URL
 
-## Picking the file silently
+## Picking the file when ambiguous
 
-If the user names a generic noun ("README", "이 문서") without a path:
-1. If exactly one match exists in or below the current directory → use it. Don't ask.
-2. If multiple → silently pick the one in the project root (alongside `package.json` / `pyproject.toml` / `Cargo.toml` / `.git`).
-3. Only ask if step 2 is still ambiguous.
+If the user names a generic noun ("README", "이 문서") without a path and multiple files match, ask them which one — *briefly*. A short list of paths and a one-line question. Don't dump grep results, don't narrate the search.
 
-Listing matches and asking the user is the kind of friction this skill is supposed to remove. Default to acting; ask only as a last resort.
+If exactly one match exists, just use it.
 
 ## What the CLI does (for context)
 
