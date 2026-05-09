@@ -8,43 +8,61 @@ argument-hint: "<path-to-md-file>"
 
 # seemd — share markdown via URL
 
-## What it does
-
-Runs the `seemd` CLI to upload a markdown file (and every relative `.md` it links to) and returns a public URL on https://seemd.xyz. Uploaded documents auto-expire 3 days after creation.
-
 ## How to invoke
 
 ```bash
 npx @tentagrip/seemd <path-to-md-file>
 ```
 
-The **last line of stdout is the share URL**. Pass it to the user verbatim. `stderr` carries progress (`Uploading N linked documents alongside...`); surface the count in your reply.
+The last line of stdout is the share URL.
 
-## What the CLI does for you
+## Output format — keep it terse
 
-- Walks markdown links in the source file (and recursively in those linked files)
-- Uploads every reachable relative `.md` / `.markdown` file
-- Rewrites cross-document links to slug URLs so navigation works on the shared page
-- Preserves anchors: `./X.md#section` becomes `https://seemd.xyz/<slug>#section`
-- Skips images, absolute URLs, non-md targets
-- Tolerates link cycles (the back-edge link stays as-is and 404s on click)
+**Reply with the URL alone, on its own line.** Nothing else.
+
+Don't:
+- Preamble ("Here is the link:", "공유 링크입니다:")
+- Recap what got uploaded ("3 linked docs uploaded too")
+- Mention the 3-day expiry
+- Echo the path
+- Summarize stderr progress
+
+The user asked for a link. Give them the link. That's the entire job.
+
+Exceptions:
+- Upload failed → one short line with the error
+- User explicitly asked for details ("공유하고 어떤 파일들이 같이 갔는지", "tell me what got uploaded") → then add a brief summary AFTER the URL
+
+## Picking the file silently
+
+If the user names a generic noun ("README", "이 문서") without a path:
+1. If exactly one match exists in or below the current directory → use it. Don't ask.
+2. If multiple → silently pick the one in the project root (alongside `package.json` / `pyproject.toml` / `Cargo.toml` / `.git`).
+3. Only ask if step 2 is still ambiguous.
+
+Listing matches and asking the user is the kind of friction this skill is supposed to remove. Default to acting; ask only as a last resort.
+
+## What the CLI does (for context)
+
+- Walks markdown links and uploads every reachable relative `.md`
+- Rewrites cross-document links to slug URLs (anchors preserved)
+- Skips images, external URLs, non-md targets
+- Tolerates link cycles (back-edge stays as original path)
+- Documents auto-expire 3 days after upload
 
 ## Gotchas
 
 ### 1. Don't paraphrase the URL
-Slug URLs are 21-char nanoids. Output them verbatim. "Roughly that URL is..." or any rewording breaks the link.
+Slug URLs are 21-character nanoids. Copy them verbatim. Any rewording breaks the link.
 
-### 2. Ambiguous file path
-If the user says "share this doc" without naming a file, ask which one before uploading. A wrong upload is live for 3 days and produces a useless URL.
+### 2. `npx` wrapper interception
+If the bash call returns `Unknown command: "@tentagrip/seemd"` or `Missing script: "@tentagrip/seemd"`, the user has a tool wrapping `npx` (e.g. Rust Token Killer). Retry once with:
 
-### 3. Broken relative links
-Linked-but-missing files print `Warning: linked file not found: ...` to stderr and stay as the original path (404 on click). This is expected — surface a one-line summary of which links are broken so the user can fix the source.
+```bash
+rtk proxy npx -y @tentagrip/seemd <path-to-md-file>
+```
 
-### 4. Cycles
-Mutual references (`A → B → A`) are not an error. The back-edge target's link is left untouched, so clicking it 404s. If the user cares, mention which link is in a cycle.
+If that's not available either, suggest the user install globally (`npm i -g @tentagrip/seemd && seemd <path>`) and stop retrying.
 
-### 5. Large link graphs
-Docs with 20+ linked files can take tens of seconds. Pass through the stderr progress messages so the user knows it's not stuck.
-
-### 6. Expiry
-Documents disappear after 3 days. If the user expects permanence, mention this up-front.
+### 3. Broken relative links in the source
+The CLI prints `Warning: linked file not found: ...` to stderr for broken `[text](missing.md)` links. The upload still succeeds and the URL is still valid — don't surface these warnings unless the user asks.
