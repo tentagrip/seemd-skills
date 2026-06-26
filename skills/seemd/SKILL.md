@@ -1,6 +1,6 @@
 ---
 name: seemd
-description: Use when the user asks for a shareable web URL for a local markdown file. Triggers on phrases like "share this markdown", "share this doc", "give me a link for this", "send this as a URL", "publish this", "make a public page for this", and Korean equivalents like "공유해줘", "이 README 공유", "링크로 보내줘". Especially when the user names a `.md` file path together with one of those phrases. Runs `npx @tentagrip/seemd <path>`, returns a slug URL on https://seemd.xyz. Linked `.md` files are uploaded together and cross-document links rewritten to slug URLs. Documents auto-expire after 3 days.
+description: Use when the user asks for a shareable web URL for a local markdown file. Triggers on phrases like "share this markdown", "share this doc", "give me a link for this", "send this as a URL", "publish this", "make a public page for this", and Korean equivalents like "공유해줘", "이 README 공유", "링크로 보내줘", and re-share phrases like "update and re-share", "같은 링크로 재공유", "내용 갱신해서 다시 공유". Especially when the user names a `.md` file path together with one of those phrases. Runs `npx @bottari/seemd <path>`, returns a slug URL on https://seemd.xyz. Linked `.md` files are uploaded together and cross-document links rewritten to slug URLs. Documents auto-expire after 3 days.
 user-invocable: true
 allowed-tools: Bash
 argument-hint: "<path-to-md-file>"
@@ -11,10 +11,20 @@ argument-hint: "<path-to-md-file>"
 ## How to invoke
 
 ```bash
-npx @tentagrip/seemd <path-to-md-file>
+npx @bottari/seemd <path-to-md-file>
 ```
 
 The last line of stdout is the share URL.
+
+## Re-sharing / updating a shared doc
+
+The CLI remembers every file you've shared (path → slug + edit token, in `~/.config/seemd/owned.json`). So when the user wants to **update the content but keep the same link** ("내용 갱신해서 다시 공유", "update and re-share", "같은 링크로 재공유"), just run the same command on the same path again:
+
+```bash
+npx @bottari/seemd <same-path>
+```
+
+It returns the **same URL** with the new content and resets the expiry (even reviving an already-expired doc). To force a brand-new link instead, add `--new`.
 
 ## Output format — keep it terse
 
@@ -53,13 +63,13 @@ If exactly one match exists, just use it.
 Slug URLs are 21-character nanoids. Copy them verbatim. Any rewording breaks the link.
 
 ### 2. `npx` wrapper interception
-If the bash call returns `Unknown command: "@tentagrip/seemd"` or `Missing script: "@tentagrip/seemd"`, the user has a tool wrapping `npx` (e.g. Rust Token Killer). Retry once with:
+If the bash call returns `Unknown command: "@bottari/seemd"` or `Missing script: "@bottari/seemd"`, the user has a tool wrapping `npx` (e.g. Rust Token Killer). Retry once with:
 
 ```bash
-rtk proxy npx -y @tentagrip/seemd <path-to-md-file>
+rtk proxy npx -y @bottari/seemd <path-to-md-file>
 ```
 
-If that's not available either, suggest the user install globally (`npm i -g @tentagrip/seemd && seemd <path>`) and stop retrying.
+If that's not available either, suggest the user install globally (`npm i -g @bottari/seemd && seemd <path>`) and stop retrying.
 
 ### 3. Broken relative links in the source
 The CLI prints `Warning: linked file not found: ...` to stderr for broken `[text](missing.md)` links. The upload still succeeds and the URL is still valid — don't surface these warnings unless the user asks.
