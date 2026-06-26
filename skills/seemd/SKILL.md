@@ -1,6 +1,6 @@
 ---
 name: seemd
-description: Use when the user asks for a shareable web URL for a local markdown file. Triggers on phrases like "share this markdown", "share this doc", "give me a link for this", "send this as a URL", "publish this", "make a public page for this", and Korean equivalents like "공유해줘", "이 README 공유", "링크로 보내줘", and re-share phrases like "update and re-share", "같은 링크로 재공유", "내용 갱신해서 다시 공유". Especially when the user names a `.md` file path together with one of those phrases. Runs `npx @bottari/seemd <path>`, returns a slug URL on https://seemd.xyz. Linked `.md` files are uploaded together and cross-document links rewritten to slug URLs. Documents auto-expire after 3 days.
+description: Use when the user asks for a shareable web URL for a local markdown file. Triggers on phrases like "share this markdown", "share this doc", "give me a link for this", "send this as a URL", "publish this", "make a public page for this", and Korean equivalents like "공유해줘", "이 README 공유", "링크로 보내줘", and re-share phrases like "update and re-share", "re-share the same link", "같은 링크로 재공유", "다시 공유해줘", "수정해서 다시 공유", "내용 갱신해서 다시 공유". Especially when the user names a `.md` file path together with one of those phrases. Runs `npx @bottari/seemd <path>`, returns a slug URL on https://seemd.xyz. Linked `.md` files are uploaded together and cross-document links rewritten to slug URLs. Documents auto-expire after 3 days.
 user-invocable: true
 allowed-tools: Bash
 argument-hint: "<path-to-md-file>"
